@@ -1,0 +1,675 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   RIGUA — DESIGN SYSTEM
+   Architecture en 3 couches : primitives -> sémantique -> composant.
+   Toute la palette est dérivée de public/logo_rigua.svg (échantillonnage des
+   pixels du badge officiel). Aucune couleur inventée.
+   Contrastes vérifiés en OKLab, ratios WCAG réels (voir docs/direction-visuelle.md).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   COUCHE 1 — PRIMITIVES
+   Valeurs brutes. Ne jamais les utiliser directement dans un composant.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Orange/vermillon — désormais couleur PRINCIPALE (encre, fonds foncés, primary).
+     Dérivée du dégradé du médaillon du logo (hue 38), étendue sur toute
+     l'échelle 50→950 pour couvrir les mêmes usages que l'ex-échelle verte
+     (texte courant, fonds sombres, surfaces). Couleurs échangées avec le
+     vert à la demande : ce qui était vert est maintenant orange. */
+  --pa-green-50: oklch(0.968 0.018 38);
+  --pa-green-100: oklch(0.935 0.038 38);
+  --pa-green-200: oklch(0.875 0.062 38);
+  --pa-green-300: oklch(0.795 0.085 38);
+  --pa-green-400: oklch(0.715 0.108 38);
+  --pa-green-500: oklch(0.685 0.175 38); /* #f45601 approx. — dégradé du logo */
+  --pa-green-600: oklch(0.61 0.195 38);
+  --pa-green-700: oklch(0.535 0.195 38);
+  --pa-green-800: oklch(0.445 0.165 38); /* encre principale, blanc dessus 7,92:1 */
+  --pa-green-900: oklch(0.35 0.14 38); /* encre la plus sombre */
+  --pa-green-950: oklch(0.26 0.1 38);
+
+  /* Crème. cream-50 est le blanc cassé exact du disque central du logo. */
+  --pa-cream-50: oklch(0.988 0.006 85);
+  --pa-cream-100: oklch(0.97 0.01 85);
+  --pa-cream-200: oklch(0.94 0.014 85);
+  --pa-cream-300: oklch(0.885 0.018 85);
+  --pa-cream-400: oklch(0.81 0.02 85);
+  --pa-cream-500: oklch(0.72 0.021 85);
+  --pa-cream-600: oklch(0.615 0.02 85);
+  --pa-cream-700: oklch(0.51 0.018 85);
+  --pa-cream-800: oklch(0.405 0.015 85);
+  --pa-cream-900: oklch(0.315 0.012 85);
+
+  /* Vert émeraude — désormais couleur D'ACCENT (signal), sur le ton de
+     l'anneau et du pictogramme du logo (hue 157.7). Couleurs échangées
+     avec l'orange à la demande : ce qui était orange est maintenant vert.
+     Accentué (moins clair, plus saturé) après un premier passage jugé trop pâle.
+     Nommé "emerald" (et non plus "orange", résidu de l'échange de noms) :
+     le nom doit dire la teinte réelle, pas son ancien rôle. */
+  --pa-emerald-300: oklch(0.795 0.085 157.7);
+  --pa-emerald-400: oklch(0.715 0.135 157.7); /* vert accentué — accent, jamais de texte blanc dessus */
+  --pa-emerald-500: oklch(0.6387 0.1497 157.7); /* #02a667 — vert émeraude exact du logo */
+  --pa-emerald-600: oklch(0.555 0.16 157.7);
+  --pa-emerald-700: oklch(0.47 0.15 157.7);
+  --pa-emerald-800: oklch(0.385 0.13 157.7); /* vert encre, contrasté sur papier et sur sable */
+
+  /* Rouge : l'anneau extérieur du badge. Réservé au parcours urgence. */
+  --pa-red-50: oklch(0.955 0.025 27);
+  --pa-red-100: oklch(0.905 0.055 27);
+  --pa-red-200: oklch(0.82 0.11 27); /* rouge plus lisible que 100, encore clair sur fond sombre */
+  --pa-red-300: oklch(0.75 0.155 27); /* rouge clair plus soutenu que 200, encore net sur fond sombre */
+  --pa-red-500: oklch(0.545 0.195 27);
+  --pa-red-600: oklch(0.4917 0.1985 27); /* #b70707 — logo */
+  --pa-red-700: oklch(0.42 0.175 27);
+
+  /* Amber : l'anneau intermédiaire du logo, entre le rouge extérieur et le
+     vert du pictogramme (hue ~41, #f75b01 au plus saturé). Nommé "amber"
+     plutôt que "orange" pour ne pas recollisionner avec pa-emerald-* ci-dessus,
+     qui est en réalité vert depuis l'échange de noms. */
+  --pa-amber-50: oklch(0.965 0.025 41); /* #ffeee7 — surface d'alerte, remplace red-50 */
+  --pa-amber-100: oklch(0.92 0.06 41); /* hover discret sur amber-50, remplace red-100 */
+  --pa-amber-300: oklch(0.83 0.11 41);
+  --pa-amber-400: oklch(0.75 0.16 41);
+  --pa-amber-500: oklch(0.67 0.205 41); /* #f75b01 — orange exact du logo, texte foncé uniquement */
+  --pa-amber-600: oklch(0.58 0.19 39); /* #d14200 — blanc dessus : 4,66:1 (AA) */
+  --pa-amber-700: oklch(0.48 0.18 35); /* #ae1a00 — blanc dessus : 7,11:1 (AAA), remplace urgent */
+  --pa-amber-800: oklch(0.38 0.12 41); /* #742400 — encre sur amber-50 : 9,38:1 (AAA), remplace red-700 */
+
+  /* Papier : la crème désaturée à peine, fond dominant du site. */
+  --pa-paper: oklch(0.988 0.0055 85);
+  --pa-white: oklch(1 0 0);
+
+  /* Noir et blanc purs : réservés aux titres, paragraphes et foregrounds de
+     bouton, qui doivent basculer strictement selon la clarté du fond plutôt
+     que suivre l'encre teintée (verte) du reste du design system. */
+  --pa-ink-black: oklch(0 0 0);
+  --pa-ink-white: oklch(1 0 0);
+
+  /* Rythme vertical et gouttières */
+  --pa-section-y: clamp(4rem, 8vw, 8rem);
+  --pa-section-y-tight: clamp(2.5rem, 5vw, 4.5rem);
+  --pa-gutter: clamp(1.25rem, 4vw, 2rem);
+  --pa-container: 78rem;
+  --pa-measure: 68ch; /* longueur de ligne de lecture confortable */
+
+  /* Mouvement */
+  --pa-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pa-dur-fast: 150ms;
+  --pa-dur: 260ms;
+  --pa-dur-slow: 700ms;
+}
+
+/* --------------------------------------------------------------------------
+   COUCHE 2 — SÉMANTIQUE
+   Les noms que consomment les composants. Surface papier par défaut.
+   Les alias shadcn (--background, --primary, ...) pointent ici.
+   -------------------------------------------------------------------------- */
+:root {
+  --radius: 0.5rem; /* 8px — secteur santé : confiance sans mollesse. Aucun pill. */
+
+  /* Fonds et encres */
+  --background: var(--pa-paper);
+  --foreground: var(--pa-ink-black); /* noir pur sur fond clair (titres/paragraphes) */
+  --surface: var(--pa-white);
+  --surface-warm: var(--pa-cream-100);
+  --surface-sand: var(--pa-cream-300);
+  --surface-deep: var(--pa-green-900);
+
+  --card: var(--pa-white);
+  --card-foreground: var(--pa-green-900);
+  --popover: var(--pa-white);
+  --popover-foreground: var(--pa-green-900);
+
+  /* Action principale : l'orange du dégradé du logo. Blanc dessus = 7,92:1 (AAA). */
+  --primary: var(--pa-green-800);
+  --primary-foreground: var(--pa-paper);
+  --primary-hover: var(--pa-green-900);
+
+  --secondary: var(--pa-cream-200);
+  --secondary-foreground: var(--pa-green-900);
+
+  --muted: var(--pa-cream-100);
+  --muted-foreground: var(--pa-cream-800); /* 8,27:1 sur papier — accentué (cream-700 était trop pâle à la lecture) */
+
+  /* Vert émeraude : couleur de signal, ton de l'anneau et du pictogramme du logo.
+     Ne porte jamais de texte blanc. Deux rôles à ne pas confondre :
+       --accent-foreground : l'encre posée SUR un aplat vert plein ;
+       --accent-ink        : le vert utilisé COMME encre (libellés, chevrons).
+     Les confondre rendait les libellés et les chevrons invisibles sur les
+     sections orange, où --accent-foreground vaut orange foncé. */
+  --accent: var(--pa-emerald-400);
+  --accent-foreground: var(--pa-green-900); /* encre sur un aplat vert */
+  --accent-ink: var(--pa-emerald-800); /* 8,54:1 sur papier */
+  --accent-subtle: var(--pa-emerald-300);
+  /* Aplat de badge plein (Eyebrow) : ici --accent est déjà la teinte pleine,
+     donc --accent-solid s'y aligne. Redéfini sur data-surface="deep", où
+     --accent est éclairci pour rester lisible en tant qu'encre/trait. */
+  --accent-solid: var(--accent);
+  --accent-solid-foreground: var(--pa-paper);
+
+  /* Couleur par défaut des boutons : l'orange vif du logo (anneau
+     intermédiaire), pas --primary (trop sombre/brun) ni --accent (vert,
+     réservé au signal). Mêmes tons que le CTA du hero et le lien urgence. */
+  --accent-action: var(--pa-amber-600); /* #d14200 — blanc dessus : 4,66:1 (AA) */
+  --accent-action-foreground: var(--pa-white);
+  --accent-action-hover: var(--pa-amber-700); /* #ae1a00 — blanc dessus : 7,11:1 (AAA) */
+
+  /* Urgence : l'orange du logo (anneau intermédiaire). Basculé depuis le
+     rouge de l'anneau extérieur à la demande — tout le rouge du site devient
+     orange, y compris ce parcours. */
+  --urgent: var(--pa-amber-700); /* #ae1a00 — blanc dessus : 7,11:1 */
+  --urgent-foreground: var(--pa-white);
+  --urgent-surface: var(--pa-amber-50);
+  --urgent-on-surface: var(--pa-amber-800); /* 9,38:1 */
+
+  --destructive: var(--pa-amber-700);
+  --destructive-foreground: var(--pa-white);
+
+  /* Filets. line = décoratif ; line-strong = frontière d'interaction (>= 3:1). */
+  --line: var(--pa-cream-300);
+  --line-strong: var(--pa-cream-600); /* 4,1:1 sur blanc */
+  --border: var(--pa-cream-300);
+  --input: var(--pa-cream-600);
+  --ring: var(--pa-green-600);
+
+  /* Ombres : discrètes et teintées orange foncé (encre principale), jamais de noir pur. */
+  --shadow-subtle: 0 1px 2px oklch(0.35 0.14 38 / 0.06);
+  --shadow-raised: 0 2px 12px oklch(0.35 0.14 38 / 0.08);
+  --shadow-overlay: 0 12px 40px oklch(0.35 0.14 38 / 0.16);
+
+  /* Alias shadcn non utilisés par ce site, gardés cohérents */
+  --sidebar: var(--pa-cream-50);
+  --sidebar-foreground: var(--pa-green-900);
+  --sidebar-primary: var(--pa-green-800);
+  --sidebar-primary-foreground: var(--pa-paper);
+  --sidebar-accent: var(--pa-cream-100);
+  --sidebar-accent-foreground: var(--pa-green-900);
+  --sidebar-border: var(--pa-cream-300);
+  --sidebar-ring: var(--pa-green-600);
+  --chart-1: var(--pa-green-800);
+  --chart-2: var(--pa-emerald-400);
+  --chart-3: var(--pa-green-500);
+  --chart-4: var(--pa-cream-500);
+  --chart-5: var(--pa-green-300);
+}
+
+/* --------------------------------------------------------------------------
+   COUCHE 2b — SURFACES CONTEXTUELLES
+   Une section change de fond -> ses tokens sémantiques suivent.
+   C'est ce qui garantit la règle #11 : aucun texte ne descend sous 0,85
+   d'opacité, parce qu'on change la COULEUR du token, pas son alpha.
+
+   Usage : <section data-surface="deep" className="bg-background"> ... </section>
+
+   ⚠️ Toujours passer par `data-surface` + `bg-background`, jamais par les
+   utilitaires de couleur bruts (`bg-surface-sand`, `bg-green-900`...). Ces
+   utilitaires posent le fond SANS basculer les tokens de texte : sur un fond
+   crème, `--muted-foreground` resterait à cream-700, soit 3,94:1, sous le
+   seuil AA. Constaté au rendu, corrigé par l'attribut.
+   -------------------------------------------------------------------------- */
+
+/* Redéclarer `color` ici est indispensable, et l'oublier a produit un bug réel :
+   des paragraphes marine sur fond marine, ratio 1:1, invisibles.
+   `color: var(--foreground)` n'est posé que sur `body`, où la variable est donc
+   résolue une fois pour toutes en marine. Redéfinir `--foreground` sur une
+   section ne rejoue pas cette déclaration : le texte sans classe de couleur
+   continue d'hériter la valeur calculée au niveau de `body`.
+   Les titres échappaient au problème (la couche de base leur applique
+   `color: var(--foreground)`, résolu localement), ce qui rendait le défaut
+   invisible à la relecture : seuls les <p> et <span> nus étaient touchés. */
+[data-surface] {
+  color: var(--foreground);
+}
+[data-surface="warm"] {
+  --background: var(--pa-cream-100);
+  --foreground: var(--pa-green-900); /* redéclaré : sinon hérite du blanc d'un data-surface="deep" englobant */
+  --surface: var(--pa-white);
+  --muted: var(--pa-cream-200);
+  --muted-foreground: var(--pa-cream-800); /* 8,27:1 sur crème claire — accentué */
+  --accent-ink: var(--pa-emerald-800); /* 8,10:1 sur crème claire */
+  --border: var(--pa-cream-300);
+}
+
+[data-surface="sand"] {
+  --background: var(--pa-cream-300);
+  --surface: var(--pa-cream-100);
+  --muted: var(--pa-cream-200);
+  --muted-foreground: var(--pa-cream-900); /* 9,15:1 sur crème — accentué (cream-800 restait plus pâle que sur les autres surfaces) */
+  --accent-ink: var(--pa-emerald-800); /* 6,25:1 sur crème */
+  --border: var(--pa-cream-500);
+  --line: var(--pa-cream-500);
+}
+
+[data-surface="deep"] {
+  --background: var(--pa-green-900);
+  --foreground: var(--pa-ink-white); /* blanc pur sur fond marine (titres/paragraphes) */
+  --surface: var(--pa-green-800);
+  --card: var(--pa-green-800);
+  --card-foreground: var(--pa-ink-white);
+  --muted: var(--pa-green-800);
+  --muted-foreground: var(--pa-cream-200); /* 11,18:1 — pleine opacité, jamais d'alpha */
+  --secondary: var(--pa-green-800);
+  --secondary-foreground: var(--pa-paper);
+  --accent: var(--pa-emerald-300); /* clair : encre/traits lisibles sur fond marine */
+  --accent-foreground: var(--pa-green-900); /* encre sur un aplat vert clair */
+  --accent-ink: var(--pa-emerald-300); /* le vert clair devient l'encre ici */
+  --accent-subtle: var(--pa-emerald-400);
+  /* Aplat de badge plein (Eyebrow) : même vert saturé que sur fond clair,
+     pas la version éclaircie de --accent ci-dessus. --accent doit rester
+     clair ici pour rester lisible en tant que trait/encre sur le marine ;
+     un badge en aplat plein n'a pas cette contrainte et peut porter la
+     teinte pleine du logo, texte blanc dessus. */
+  --accent-solid: var(--pa-emerald-500);
+  --accent-solid-foreground: var(--pa-paper);
+  --primary: var(--pa-paper);
+  --primary-foreground: var(--pa-green-900);
+  --primary-hover: var(--pa-cream-200);
+  /* amber-600 reste net sur ce fond sombre (contrairement à sur papier) :
+     on garde le même orange vif qu'ailleurs plutôt que de replier sur 700,
+     qui lit trop foncé/brun une fois posé sur la photo du hero. */
+  --accent-action: var(--pa-amber-600);
+  --accent-action-hover: var(--pa-amber-700);
+  --line: var(--pa-green-700);
+  --line-strong: var(--pa-green-500);
+  --border: var(--pa-green-700);
+  --input: var(--pa-green-500);
+  --ring: var(--pa-emerald-300);
+}
+
+/* --------------------------------------------------------------------------
+   COUCHE 3 — TOKENS DE COMPOSANT
+   Cibles tactiles 44px minimum, corps 16px minimum. Non négociable :
+   le public du site est âgé ou proche de personnes âgées.
+   -------------------------------------------------------------------------- */
+:root {
+  --control-h: 2.75rem; /* 44px */
+  --control-h-sm: 2.5rem; /* 40px, usages secondaires denses uniquement */
+  --control-h-lg: 3.25rem; /* 52px, CTA du hero */
+  --control-px: 1.25rem;
+  --control-text: 1rem; /* 16px */
+  --focus-ring-w: 3px;
+  --focus-ring-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   PONT TAILWIND v4
+   @theme inline résout à la compilation : on n'y met jamais un token qui
+   se référence lui-même (--font-sans: var(--font-sans) casse le chargement).
+   Les polices next/font sont exposées sous des noms distincts.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+  --font-heading: var(--font-display);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
+  --color-surface-sand: var(--surface-sand);
+  --color-surface-deep: var(--surface-deep);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-solid-foreground: var(--accent-solid-foreground);
+  --color-accent-action: var(--accent-action);
+  --color-accent-action-foreground: var(--accent-action-foreground);
+  --color-accent-action-hover: var(--accent-action-hover);
+  --color-urgent: var(--urgent);
+  --color-urgent-foreground: var(--urgent-foreground);
+  --color-urgent-surface: var(--urgent-surface);
+  --color-urgent-on-surface: var(--urgent-on-surface);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Primitives exposées pour les cas où une section a besoin d'un ton précis */
+  --color-green-50: var(--pa-green-50);
+  --color-green-100: var(--pa-green-100);
+  --color-green-200: var(--pa-green-200);
+  --color-green-300: var(--pa-green-300);
+  --color-green-400: var(--pa-green-400);
+  --color-green-500: var(--pa-green-500);
+  --color-green-600: var(--pa-green-600);
+  --color-green-700: var(--pa-green-700);
+  --color-green-800: var(--pa-green-800);
+  --color-green-900: var(--pa-green-900);
+  --color-green-950: var(--pa-green-950);
+  --color-cream-50: var(--pa-cream-50);
+  --color-cream-100: var(--pa-cream-100);
+  --color-cream-200: var(--pa-cream-200);
+  --color-cream-300: var(--pa-cream-300);
+  --color-cream-400: var(--pa-cream-400);
+  --color-cream-500: var(--pa-cream-500);
+  --color-cream-600: var(--pa-cream-600);
+  --color-cream-700: var(--pa-cream-700);
+  --color-cream-800: var(--pa-cream-800);
+  --color-cream-900: var(--pa-cream-900);
+  --color-emerald-300: var(--pa-emerald-300);
+  --color-emerald-400: var(--pa-emerald-400);
+  --color-emerald-500: var(--pa-emerald-500);
+  --color-emerald-600: var(--pa-emerald-600);
+  --color-emerald-700: var(--pa-emerald-700);
+  --color-emerald-800: var(--pa-emerald-800);
+  --color-paper: var(--pa-paper);
+  /* red-100/200 : seul usage prévu, le lien urgence du hero sur fond sombre.
+     red-600 (--urgent) est pensé pour du texte sur fond clair et perd son
+     contraste sur une surface sombre. red-200 est la même famille, plus
+     saturée, pour que le lien lise davantage comme "rouge" qu'un blanc teinté. */
+  --color-red-100: var(--pa-red-100);
+  --color-red-200: var(--pa-red-200);
+  --color-red-300: var(--pa-red-300);
+  --color-red-500: var(--pa-red-500);
+  /* amber-* : vrai orange du logo. Couvre désormais le bouton d'action
+     principale du hero ET le parcours urgence (--urgent/--destructive
+     pointent vers ces mêmes tons) : il n'y a plus de rouge affiché sur le
+     site, les tokens pa-red-* restent définis mais ne sont plus référencés. */
+  --color-amber-50: var(--pa-amber-50);
+  --color-amber-100: var(--pa-amber-100);
+  --color-amber-300: var(--pa-amber-300);
+  --color-amber-400: var(--pa-amber-400);
+  --color-amber-500: var(--pa-amber-500);
+  --color-amber-600: var(--pa-amber-600);
+  --color-amber-700: var(--pa-amber-700);
+  --color-amber-800: var(--pa-amber-800);
+
+  /* Rayons. Base 8px, aucun pill. */
+  --radius-xs: calc(var(--radius) * 0.5); /* 4px */
+  --radius-sm: calc(var(--radius) * 0.75); /* 6px */
+  --radius-md: var(--radius); /* 8px */
+  --radius-lg: var(--radius); /* 8px — volontairement identique à md */
+  --radius-xl: calc(var(--radius) * 1.5); /* 12px, images et grands blocs */
+  --radius-2xl: calc(var(--radius) * 2); /* 16px, médias uniquement */
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2);
+
+  /* Échelle typographique. clamp() sur tous les titres. */
+  --text-2xs: 0.75rem; /* 12px, tags uniquement */
+  --text-xs: 0.8125rem; /* 13px */
+  --text-sm: 0.9375rem; /* 15px */
+  --text-base: 1rem; /* 16px — plancher du corps */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: clamp(1.375rem, 1.1rem + 1vw, 1.625rem);
+  --text-3xl: clamp(1.625rem, 1.25rem + 1.6vw, 2.125rem);
+  --text-4xl: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  --text-5xl: clamp(2.125rem, 1.5rem + 3vw, 3.5rem);
+  --text-6xl: clamp(2.875rem, 1.7rem + 5vw, 5rem);
+
+  --shadow-subtle: var(--shadow-subtle);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-overlay: var(--shadow-overlay);
+
+  --ease-brand: var(--pa-ease);
+  --container-site: var(--pa-container);
+  --spacing-section: var(--pa-section-y);
+  --spacing-gutter: var(--pa-gutter);
+}
+
+/* --------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Titres : Newsreader, jamais sous 24px (règle #8). */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  h1 {
+    font-size: var(--text-5xl);
+    font-variation-settings: "opsz" 42;
+  }
+
+  h2 {
+    font-size: var(--text-4xl);
+    font-variation-settings: "opsz" 32;
+  }
+
+  h3 {
+    font-size: var(--text-2xl);
+    line-height: 1.25;
+    font-variation-settings: "opsz" 24;
+  }
+
+  /* h4 et en dessous repassent en sans : sous 24px un serif de lecture
+     perd sa lisibilité et son intérêt. */
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    color: var(--foreground);
+  }
+
+  h4 {
+    font-size: var(--text-lg);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Focus visible, épais, jamais supprimé. */
+  :focus-visible {
+    outline: var(--focus-ring-w) solid var(--ring);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background-color: var(--pa-emerald-300);
+    color: var(--pa-green-900);
+  }
+
+  /* Zones cliquables : le curseur doit toujours l'annoncer. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  /* Les liens téléphone doivent être évidents et cliquables (brief §11). */
+  a[href^="tel:"] {
+    white-space: nowrap;
+  }
+
+  img,
+  svg,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* L'Orienteur est bâti sur <details name>, donc sans JavaScript. Le marqueur
+     natif est remplacé par un + / − dessiné, aligné à droite de la phrase. */
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   UTILITAIRES DE MARQUE
+   -------------------------------------------------------------------------- */
+@utility container-site {
+  width: 100%;
+  max-width: var(--pa-container);
+  margin-inline: auto;
+  padding-inline: var(--pa-gutter);
+}
+
+@utility section-y {
+  padding-block: var(--pa-section-y);
+}
+
+@utility section-y-tight {
+  padding-block: var(--pa-section-y-tight);
+}
+
+@utility section-pb-tight {
+  padding-bottom: var(--pa-section-y-tight);
+}
+
+@utility measure {
+  max-width: var(--pa-measure);
+}
+
+/* Libellé de section. Remplace un troisième fichier de police par une
+   variation de la police de corps : capitales, interlettrage, ocre. */
+@utility eyebrow {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  color: var(--accent-ink);
+}
+
+/* Filet ocre qui se déploie au survol du parent. Signature d'interaction
+   du site : pas de translation, pas d'ombre qui grossit. */
+@utility rule-grow {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--pa-dur) var(--pa-ease);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Révélation au scroll. L'état masqué est rendu côté serveur pour éviter un
+   flash de contenu déjà en place ; le <noscript> du layout l'annule, et
+   `prefers-reduced-motion` est court-circuité dans components/reveal.tsx. */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--pa-dur-slow) var(--pa-ease),
+    transform var(--pa-dur-slow) var(--pa-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  &[data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Numéro d'étape de la timeline du parcours. Chiffre en ocre encre, aligné sur
+   la ligne verticale, jamais dans une pastille pleine. */
+@utility step-num {
+  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--accent-ink);
+}
+
+/* Chiffres hors titre. Inclusive Sans dessine un zéro barré (une diagonale à
+   l'intérieur), sans variante OpenType pour l'en défaire : ça se lit comme un
+   Ø et se confond avec la lettre O barrée dans une date, un GIR, un tarif ou
+   un numéro de téléphone. `ui-sans-serif`/`system-ui` (Segoe UI, San
+   Francisco, Roboto…) dessinent tous un zéro plein. Cette classe ne change
+   que la police : taille, poids, couleur restent ceux du texte qui l'entoure.
+   À poser sur tout fragment de texte qui contient un ou plusieurs chiffres
+   (dates, GIR, tarifs, durées, téléphone) — jamais sur un titre ≥24px, déjà
+   en Newsreader et déjà sans zéro barré. */
+@utility nums {
+  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, sans-serif;
+}
+
+/* Grain très léger, sections marine uniquement, opacité 0,035 maximum. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

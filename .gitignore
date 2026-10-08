@@ -20,6 +20,10 @@
 # production
 /build
 
+# Build du Studio Sanity (npx sanity deploy)
+/dist
+/.sanity
+
 # misc
 .DS_Store
 *.pem

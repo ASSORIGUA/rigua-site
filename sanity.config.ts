@@ -7,7 +7,8 @@ import { visionTool } from "@sanity/vision"
 import { schemaTypes, TYPES_SINGLETONS } from "./sanity/schemas"
 
 /**
- * Configuration du Studio Sanity, embarqué sur /studio.
+ * Configuration du Studio Sanity, déployé chez Sanity sur
+ * https://assorigua.sanity.studio (voir sanity.cli.ts).
  *
  * Le menu reflète les pages du site : une entrée par page (singleton),
  * puis les listes (actualités, témoignages, services). Les singletons sont
@@ -50,7 +51,6 @@ const structure = (S: StructureBuilder) =>
 export default defineConfig({
   name: "rigua",
   title: "RIGUA : contenu du site",
-  basePath: "/studio",
   projectId,
   dataset,
   plugins: [structureTool({ structure }), visionTool()],

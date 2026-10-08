@@ -1,9 +1,18 @@
 import { defineCliConfig } from "sanity/cli"
 
-/** CLI Sanity : lit le projet depuis l'environnement (.env.local). */
+/**
+ * Configuration du deploiement du Studio chez Sanity.
+ * `studioHost` fixe l'adresse : https://assorigua.sanity.studio
+ * Deploiement : npx sanity deploy
+ */
 export default defineCliConfig({
   api: {
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
+    projectId: "3hk15w0h",
+    dataset: "production",
   },
+  studioHost: "assorigua",
+  deployment: {
+    appId: "cv3o3kiw391pxge7eodxobic",
+  },
+  autoUpdates: true,
 })

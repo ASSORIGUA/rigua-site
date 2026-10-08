@@ -62,6 +62,11 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   alternates: { canonical: "/" },
+  /* Propriété de la Search Console. Google lit cette balise pour confirmer
+     que le site nous appartient : la retirer casse la validation. */
+  verification: {
+    google: "UZu0CBwzLAJAaIFZHM8r_j7oorCjYu-IW9gxkrH931Y",
+  },
 };
 
 export const viewport: Viewport = {

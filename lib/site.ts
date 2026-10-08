@@ -49,7 +49,7 @@ export const site = {
    * Domaine de production. À remplacer avant mise en ligne : il sert de base
    * aux URL canoniques, au sitemap et aux données structurées.
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rigua.fr",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.assorigua.com",
   fondatrice: {
     prenomNom: "Corrine William",
     profession: "infirmière libérale",

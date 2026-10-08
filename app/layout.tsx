@@ -36,7 +36,9 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.nom,
-  icons: { icon: "/logo_rigua.svg" },
+  /* Les icônes viennent des fichiers d'app/ (favicon.ico, icon.png,
+     apple-icon.png), que Next.js déclare lui-même. Le logo complet reste
+     illisible en 16px : ces icônes sont recadrées sur le pictogramme. */
   /* Le brief §11 impose des numéros directement cliquables. */
   formatDetection: { telephone: true },
   openGraph: {
@@ -44,6 +46,20 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     siteName: site.nom,
     url: site.url,
+    /* Aperçu des partages (Facebook, WhatsApp, LinkedIn). 1200x630 est le
+       format attendu : en dessous, les réseaux rognent ou ignorent l'image. */
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: `${site.nom} : ${site.accroche} pour les personnes âgées et dépendantes`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.png"],
   },
   alternates: { canonical: "/" },
 };

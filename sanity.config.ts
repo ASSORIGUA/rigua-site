@@ -16,8 +16,30 @@ import { schemaTypes, TYPES_SINGLETONS } from "./sanity/schemas"
  * second document du même type.
  */
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "placeholder0"
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production"
+/**
+ * Identifiants du projet Sanity.
+ *
+ * Ces valeurs sont publiques : elles figurent dans le JavaScript envoyé au
+ * navigateur et ne protègent rien. Elles sont donc écrites en repli ici, ce
+ * qui permet au Studio hébergé par Sanity (assorigua.sanity.studio) de
+ * fonctionner alors qu'il n'a aucune variable NEXT_PUBLIC_* définie : seule
+ * la version Next.js du site lit l'environnement. Un repli factice ferait
+ * échouer le Studio hébergé sur « Project not found ».
+ *
+ * Les variables d'environnement restent prioritaires, pour pouvoir viser un
+ * autre dataset (par exemple une préproduction) sans toucher au code.
+ */
+const PROJECT_ID_DEFAUT = "3hk15w0h"
+const DATASET_DEFAUT = "production"
+
+const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  process.env.SANITY_STUDIO_PROJECT_ID ||
+  PROJECT_ID_DEFAUT
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET ||
+  process.env.SANITY_STUDIO_DATASET ||
+  DATASET_DEFAUT
 
 /* `S.listItem().id()` TOUJOURS posé : un item sans id fait planter l'outil. */
 function pageItem(S: StructureBuilder, type: string, titre: string) {

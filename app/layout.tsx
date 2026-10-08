@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { jsonLdAssociation, jsonLdSite } from "@/lib/jsonld";
 import { site } from "@/lib/site";
-import "../globals.css";
+import "./globals.css";
 
 /* Titres. Serif de lecture à faible contraste, avec taille optique réelle :
    le dessin du glyphe se réajuste selon la taille affichée. */

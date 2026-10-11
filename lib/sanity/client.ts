@@ -1,6 +1,8 @@
 import { createClient, type SanityClient } from "next-sanity"
 import imageUrlBuilder from "@sanity/image-url"
 
+import { nettoieTypographie } from "@/lib/typographie"
+
 type SanityImageSource = Parameters<ReturnType<typeof imageUrlBuilder>["image"]>[0]
 
 /**
@@ -45,9 +47,13 @@ export async function safeFetch<T>(
 ): Promise<T | null> {
   if (!client) return null
   try {
-    return await client.fetch<T>(query, params, {
+    const donnees = await client.fetch<T>(query, params, {
       next: { revalidate: REVALIDATE },
     })
+    /* Tout le contenu Sanity passe par ici : c'est le seul endroit où
+       intercepter les tirets cadratins qu'un texte collé depuis Word ou
+       ChatGPT apporterait dans le Studio. Voir lib/typographie.ts. */
+    return nettoieTypographie(donnees)
   } catch (erreur) {
     console.error("[sanity] requête échouée :", erreur)
     return null
